@@ -1,5 +1,5 @@
 {
-  "name": "apollo-maps",
+  "name": "apollo-maps-client",
   "version": "1.0.0",
   "description": "Apollo Client + Maps App",
   "main": "src/index.tsx",

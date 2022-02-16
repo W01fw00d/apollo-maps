@@ -1,3 +1,5 @@
+// TODO: delete this file, move the logic to the server API mocks
+
 import {
   Geocode,
   GeocodeAPIResponse,

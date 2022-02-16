@@ -2,5 +2,5 @@ dist
 node_modules
 coverage
 
-src/secrets/googleMapsAPI.json
-src/secrets/graphqlAPI.json
+src/secrets/prod/googleMapsAPI.json
+src/secrets/prod/graphqlAPI.json
