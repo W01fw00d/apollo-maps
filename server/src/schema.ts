@@ -1,5 +1,8 @@
 const { gql } = require("apollo-server");
 
+/* TODO: is it possible to have a single source of truth with a common definition of these `types`
+for both typescript and graphql? */
+
 module.exports = gql`
   type Query {
     "Query to get location coordinates from an address"

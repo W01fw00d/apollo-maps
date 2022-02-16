@@ -1,8 +1,4 @@
-import {
-  Geocode,
-  GeocodeAPIResponse,
-  CreateJobAPIResponse,
-} from "../../client/src/interfaces/APIResponse";
+import { Geocode, JobData } from "../../client/src/interfaces/APIResponse";
 
 const { UserInputError } = require("apollo-server");
 
@@ -25,7 +21,7 @@ const POSITIONS: Positions = {
 };
 
 module.exports = {
-  geocodeAddressRequest: (address: string): any => {
+  geocodeAddressRequest: (address: string): Geocode => {
     const position = POSITIONS[address];
 
     if (!position) {
@@ -35,7 +31,7 @@ module.exports = {
     return position;
   },
 
-  createJobRequest: (pickUp: string, dropOff: string): any => {
+  createJobRequest: (pickUp: string, dropOff: string): JobData => {
     if (!POSITIONS[pickUp] || !POSITIONS[dropOff]) {
       throw new UserInputError('valids "pickup" and "dropoff" are required');
     }

@@ -1,5 +1,3 @@
-// TODO: delete this file, move the logic to the server API mocks
-
 import {
   Geocode,
   GeocodeAPIResponse,
@@ -7,6 +5,7 @@ import {
 } from "../interfaces/APIResponse";
 
 // Mocked functions for testing during development process, avoiding real API requests
+// Not in use currently
 
 interface Positions {
   [key: string]: Geocode;
