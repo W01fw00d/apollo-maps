@@ -1,7 +1,7 @@
 {
-  "name": "frontend-challenge",
+  "name": "apollo-maps",
   "version": "1.0.0",
-  "description": "React Frontend Challenge",
+  "description": "Apollo Client + Maps App",
   "main": "src/index.tsx",
   "scripts": {
     "start": "webpack-dev-server --config webpack/webpack.dev.ts",
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/W01fw00d/frontend-challenge.git"
+    "url": "git+https://github.com/W01fw00d/apollo-maps.git"
   },
   "keywords": [],
   "author": "Gabriel Romay Machado",
   "license": "GNU",
   "bugs": {
-    "url": "https://github.com/W01fw00d/frontend-challenge/issues"
+    "url": "https://github.com/W01fw00d/apollo-maps/issues"
   },
-  "homepage": "https://github.com/W01fw00d/frontend-challenge#readme",
+  "homepage": "https://github.com/W01fw00d/apollo-maps#readme",
   "dependencies": {
     "@babel/cli": "^7.16.8",
     "@babel/core": "^7.16.7",
