@@ -1,9 +1,2 @@
-dist
-node_modules
-coverage
-
 notes.txt
 manualTesting.txt
-
-src/secrets/googleMapsAPI.json
-src/secrets/graphqlAPI.json
