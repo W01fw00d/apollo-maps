@@ -1,33 +1,11 @@
 const { ApolloServer } = require("apollo-server");
+
 const typeDefs = require("./schema");
-
-const mocks = {
-  Query: () => ({
-    geocode: () => ({
-      latitude: 48.86985,
-      longitude: 2.33457,
-    }),
-  }),
-
-  Mutation: () => ({
-    job: () => ({
-      pickup: {
-        address: "Fake Address",
-        latitude: 48.86985,
-        longitude: 2.33457,
-      },
-      dropoff: {
-        address: "Fake Address",
-        latitude: 48.86985,
-        longitude: 2.33457,
-      },
-    }),
-  }),
-};
+const resolvers = require("./resolvers");
 
 const server = new ApolloServer({
   typeDefs,
-  mocks,
+  resolvers,
 });
 
 server.listen().then(() => {
