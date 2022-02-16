@@ -1,0 +1,7 @@
+{
+  "watch": "src/**/*.ts",
+  "execMap": {
+    "ts": "node ./node_modules/ts-node/dist/bin.js",
+    "_comment": "This custom config is needed while this issue is not fixed for windows: https://github.com/remy/nodemon/issues/1951"
+  }
+}

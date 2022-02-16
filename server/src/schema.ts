@@ -1,6 +1,6 @@
 const { gql } = require("apollo-server");
 
-const typeDefs = gql`
+module.exports = gql`
   type Query {
     "Query to get location coordinates from an address"
     geocode(address: String!): Coordinates
@@ -30,5 +30,3 @@ const typeDefs = gql`
     longitude: Float!
   }
 `;
-
-module.exports = typeDefs;
