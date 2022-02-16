@@ -5,9 +5,9 @@ import FullScreenError from "../molecules/FullScreenError";
 import { MapScriptStatus } from "../../enums/MapScriptStatus";
 import { PositionState } from "../../interfaces/PositionState";
 
-import github from "../../secrets/github.json";
-// import googleMapsAPI from "../../secrets/googleMapsAPI.json";
-import googleMapsAPI from "../../secrets/googleMapsAPIExample.json";
+import github from "../../secrets/prod/github.json";
+// import googleMapsAPI from "../../secrets/prod/googleMapsAPI.json";
+import googleMapsAPI from "../../secrets/dev/googleMapsAPI.json";
 
 interface Props {
   positionsState: { [key: string]: PositionState };
@@ -80,6 +80,7 @@ function Map({ positionsState }: Props) {
                 lat: geocode.lat,
                 lng: geocode.lng,
               },
+              // TODO: replace the .svg markers by open source ones
               icon: `src/assets/${[marker]}Marker.svg`,
               map: mapElement.current,
             }),

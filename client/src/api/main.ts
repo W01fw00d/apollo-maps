@@ -3,8 +3,7 @@ import {
   CreateJobAPIResponse,
 } from "../interfaces/APIResponse";
 
-// import graphqlAPI from "../secrets/graphqlAPI.json";
-import graphqlAPI from "../secrets/graphqlAPIExample.json"; // TODO: handle error when url is 404 (Not Found)
+import graphqlAPI from "../secrets/dev/graphqlAPI.json"; // TODO: handle error when url is 404 (Not Found)
 
 async function graphqlRequest(query: string) {
   return await fetch(graphqlAPI.url, {
@@ -16,11 +15,12 @@ async function graphqlRequest(query: string) {
   });
 }
 
+// TODO: use variables instead of inserting them on string template
 export async function geocodeAddressRequest(
   address: string
 ): Promise<GeocodeAPIResponse> {
   const response = await graphqlRequest(
-    `query {
+    `query GeocodeQuery{
         geocode(address: "${address}") {
           latitude,
           longitude
@@ -36,7 +36,7 @@ export async function createJobRequest(
   dropOff: string
 ): Promise<CreateJobAPIResponse> {
   const response = await graphqlRequest(
-    `mutation {
+    `mutation JobMutation{
       job(
         pickup: "${pickUp}",
         dropoff: "${dropOff}"

@@ -1,3 +1,6 @@
+// TODO: currently, these interfaces are being used by both client and server
+// When we addopt Apollo Client instead of `fetch`, maybe we can move them to the server only
+
 interface ErrorLocation {
   line: number;
   column: number;
@@ -34,7 +37,7 @@ interface Job {
   longitude: number;
 }
 
-interface JobData {
+export interface JobData {
   pickup: Job;
   dropoff: Job;
 }

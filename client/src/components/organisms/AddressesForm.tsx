@@ -33,6 +33,7 @@ interface IconsPaths {
 
 const ICONS_PATH_TEMPLATE = (file: string) => `src/assets/${file}.svg`;
 const ICONS_PATHS: IconsPaths = {
+  // TODO: replace the .svg icons by open source ones
   pickUp: {
     blank: ICONS_PATH_TEMPLATE("pickUpBadgeBlank"),
     present: ICONS_PATH_TEMPLATE("pickUpBadgePresent"),

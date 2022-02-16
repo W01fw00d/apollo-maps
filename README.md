@@ -4,19 +4,19 @@ A simple example project using Apollo Client and Server (GraphQL); and Google Ma
 
 Based on this [frontend challenge](https://github.com/W01fw00d/frontend-challenge)
 
-## How to run
+Also based on this [Apollo Tutorial](https://odyssey.apollographql.com/)
+
+## How to run (`dev` mode)
 
 - Make sure you have Node.js installed.
 
 - You need a Google Maps JS API Key.
 
-Set the `url` and `key` in `client/src/secrets/googleMapsAPI.json` (check the `googleMapsAPIExample.json`)
+Set the `key` in `client/src/secrets/dev/googleMapsAPI.json`
 
 Please be aware that if the `key` doesn't belong to an account with Billing enabled, a pop-up will appear on page load and a "For development purposes only" watermark will be displayed on the map.
 
 If you don't add an `key`, only the Google Maps features will be disabled.
-
-- Set the `url` in `client/src/secrets/graphqlAPI.json` (check the `graphqlAPIExample.json`)
 
 - Commands (`client/`)
 

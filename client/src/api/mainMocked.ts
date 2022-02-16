@@ -5,6 +5,7 @@ import {
 } from "../interfaces/APIResponse";
 
 // Mocked functions for testing during development process, avoiding real API requests
+// Not in use currently
 
 interface Positions {
   [key: string]: Geocode;
