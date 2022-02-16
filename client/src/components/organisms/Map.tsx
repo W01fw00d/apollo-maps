@@ -80,6 +80,7 @@ function Map({ positionsState }: Props) {
                 lat: geocode.lat,
                 lng: geocode.lng,
               },
+              // TODO: replace the .svg markers by open source ones
               icon: `src/assets/${[marker]}Marker.svg`,
               map: mapElement.current,
             }),
