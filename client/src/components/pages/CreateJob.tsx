@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ThemeProvider } from "@mui/material/styles";
+import { useLazyQuery, gql } from "@apollo/client";
 
 import { geocodeAddressRequest, createJobRequest } from "../../api/main";
 
@@ -34,6 +35,81 @@ function CreateJobPage() {
     dropOff: setDropOffPositionsState,
   };
 
+  const GEOCODE_QUERY = gql`
+    query GeocodeQuery($address: String!) {
+      geocode(address: $address) {
+        latitude
+        longitude
+      }
+    }
+  `;
+
+  const [geocodeAddressQueryPickUp, pickUpResult] = useLazyQuery(GEOCODE_QUERY);
+  const [geocodeAddressQueryDropOff, dropOffResult] =
+    useLazyQuery(GEOCODE_QUERY);
+
+  const manageGeocodeState = (
+    result: any /* TODO: add correct type */,
+    setState: Function
+  ) => {
+    // TODO: move complex business logic functions like this one to ../CreateJob/model.ts
+    // Create ../CreateJob/index.tsx for render logic
+    console.log({ result }); // TODO: remove
+    const { loading, data, error } = result;
+
+    if (!loading && data) {
+      const geocode = data.geocode;
+      if (geocode) {
+        const { latitude, longitude } = geocode;
+        setState({
+          status: GeocodeStatus.Present,
+          geocode: {
+            lat: latitude,
+            lng: longitude,
+          },
+        });
+      } else if (error) {
+        setState({
+          status: GeocodeStatus.Error,
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    manageGeocodeState(pickUpResult, setPickUpPositionsState);
+  }, [pickUpResult.data]);
+
+  useEffect(() => {
+    manageGeocodeState(dropOffResult, setDropOffPositionsState);
+  }, [dropOffResult.data]);
+
+  const geocodeAddressQueries: { [key: string]: Function } = {
+    pickUp: geocodeAddressQueryPickUp,
+    dropOff: geocodeAddressQueryDropOff,
+  };
+
+  const geocodeAddress = async ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    const id = target.id;
+    const address = target.value;
+
+    if (address) {
+      geocodeAddressQueries[id]({
+        variables: {
+          address,
+        },
+      });
+    } else {
+      setPositionsState[id]({
+        ...BLANK_POSITION_STATE,
+      });
+    }
+  };
+
+  // ----------------------- FORM -----------------------
+
   const BLANK_FORM_STATE: FormState = { pickUp: "", dropOff: "" };
 
   const [formState, setFormState] = useState<FormState>({
@@ -51,36 +127,6 @@ function CreateJobPage() {
       ...previousState,
       [id]: value,
     }));
-  };
-
-  const geocodeAddress = async ({
-    target,
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    const id = target.id;
-    const value = target.value;
-
-    if (value) {
-      const result = await geocodeAddressRequest(target.value);
-      const geocode = result.data.geocode;
-
-      if (result.errors || !geocode) {
-        setPositionsState[id]({
-          status: GeocodeStatus.Error,
-        });
-      } else {
-        setPositionsState[id]({
-          status: GeocodeStatus.Present,
-          geocode: {
-            lat: geocode.latitude,
-            lng: geocode.longitude,
-          },
-        });
-      }
-    } else {
-      setPositionsState[id]({
-        ...BLANK_POSITION_STATE,
-      });
-    }
   };
 
   const createJob = async () => {

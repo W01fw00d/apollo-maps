@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/W01fw00d/apollo-maps#readme",
   "dependencies": {
+    "@apollo/client": "^3.5.9",
     "@babel/cli": "^7.16.8",
     "@babel/core": "^7.16.7",
     "@babel/preset-typescript": "^7.16.7",
