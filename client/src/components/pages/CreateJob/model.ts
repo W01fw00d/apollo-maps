@@ -1,13 +1,10 @@
 import { GeocodeStatus } from "../../../enums/GeocodeStatus";
 
-export const manageGeocodeState = (
-  result: any /* TODO: add correct type */,
-  setState: Function
-) => {
-  // TODO: Maybe this function can be a customHook
-  const { loading, data, error } = result;
+export const getGeocodeCallbacks = (setState: Function) => ({
+  // Using these callbacks, we can avoid using useEffect for updating the state after API requests
+  onCompleted: (data: any /* TODO: add correct type */) => {
+    console.log("onCompleted", { data });
 
-  if (!loading && data) {
     const geocode = data.geocode;
     if (geocode) {
       const { latitude, longitude } = geocode;
@@ -18,10 +15,13 @@ export const manageGeocodeState = (
           lng: longitude,
         },
       });
-    } else if (error) {
-      setState({
-        status: GeocodeStatus.Error,
-      });
     }
-  }
-};
+  },
+  onError: (error: any) => {
+    console.log("onError", { error });
+
+    setState({
+      status: GeocodeStatus.Error,
+    });
+  },
+});
