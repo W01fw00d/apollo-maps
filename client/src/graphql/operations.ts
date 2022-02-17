@@ -8,3 +8,20 @@ export const GEOCODE_QUERY = gql`
     }
   }
 `;
+
+export const JOB_MUTATION = gql`
+  mutation JobMutation($pickUp: String!, $dropOff: String!) {
+    job(pickup: $pickUp, dropoff: $dropOff) {
+      pickup {
+        address
+        latitude
+        longitude
+      }
+      dropoff {
+        address
+        latitude
+        longitude
+      }
+    }
+  }
+`;

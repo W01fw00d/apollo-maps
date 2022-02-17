@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { ThemeProvider } from "@mui/material/styles";
-import { useLazyQuery } from "@apollo/client";
-
-import { geocodeAddressRequest, createJobRequest } from "../../../api/main";
+import { useLazyQuery, useMutation } from "@apollo/client";
 
 import { GeocodeStatus } from "../../../enums/GeocodeStatus";
 import { JobStatus } from "../../../enums/JobStatus";
 import { PositionState } from "../../../interfaces/PositionState";
 import { FormState } from "../../../interfaces/FormState";
 import theme from "../../themes/original";
+import { GEOCODE_QUERY, JOB_MUTATION } from "../../../graphql/operations";
 
 import CreateJobTemplate from "../../templates/CreateJob";
-
-import { GEOCODE_QUERY } from "../../../graphql/operations";
 
 import { manageGeocodeState } from "./model";
 
@@ -85,6 +82,14 @@ function CreateJobPage() {
 
   const [createJobState, setCreateJobState] = useState<JobStatus | null>(null);
 
+  const [createJobMutation, createJobResult] = useMutation(JOB_MUTATION, {
+    onError: (error) => {
+      // TODO: handle error displaying toaster with error message to user
+      console.error({ error });
+      setCreateJobState(null);
+    },
+  });
+
   const setForm = (id: string, value: string) => {
     setFormState((previousState) => ({
       ...previousState,
@@ -92,13 +97,22 @@ function CreateJobPage() {
     }));
   };
 
-  const createJob = async () => {
+  const createJob = () => {
     setCreateJobState(JobStatus.InProcess);
-    const result = await createJobRequest(formState.pickUp, formState.dropOff);
 
-    if (result.errors) {
+    const { pickUp, dropOff } = formState;
+    createJobMutation({
+      variables: {
+        pickUp,
+        dropOff,
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (createJobResult.error) {
       setCreateJobState(null);
-    } else {
+    } else if (createJobResult.data) {
       setCreateJobState(JobStatus.Succesful);
       setPickUpPositionsState({
         ...BLANK_POSITION_STATE,
@@ -109,7 +123,7 @@ function CreateJobPage() {
 
       setFormState({ ...BLANK_FORM_STATE });
     }
-  };
+  }, [createJobResult.data]);
 
   return (
     <ThemeProvider theme={theme}>

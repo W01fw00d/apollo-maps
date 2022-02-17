@@ -4,7 +4,6 @@ export const manageGeocodeState = (
   result: any /* TODO: add correct type */,
   setState: Function
 ) => {
-  console.log({ result }); // TODO: remove
   const { loading, data, error } = result;
 
   if (!loading && data) {

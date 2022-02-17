@@ -6,7 +6,7 @@ import App from "./App";
 import graphqlAPI from "./secrets/dev/graphqlAPI.json"; // TODO: handle error when url is 404 (Not Found)
 
 const client = new ApolloClient({
-  uri: graphqlAPI.url,
+  uri: graphqlAPI.url, // TODO: handle error when url is 404 (Not Found)
   cache: new InMemoryCache(),
 });
 

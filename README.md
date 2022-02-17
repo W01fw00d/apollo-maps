@@ -50,6 +50,16 @@ Build the App in production mode (for deploying in a server):
 npm run build
 ```
 
+## Troubleshooting
+
+If you get a warning when using Chrome DevTools similar to:
+
+`DevTools failed to load source map`
+
+Try to disable the JavaScript source maps in DevTools preferences
+
+[More details about this workaround in StackOverflow](https://stackoverflow.com/questions/35002087/disable-source-maps-in-chrome-devtools#:~:text=Open%20Developer%20Tools%2C%20go%20to,under%20the%20%22Sources%22%20settings.)
+
 ## Tech Stack
 
 - TypeScript
