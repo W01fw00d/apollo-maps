@@ -4,6 +4,7 @@ export const manageGeocodeState = (
   result: any /* TODO: add correct type */,
   setState: Function
 ) => {
+  // TODO: Maybe this function can be a customHook
   const { loading, data, error } = result;
 
   if (!loading && data) {

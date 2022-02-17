@@ -110,16 +110,22 @@ function CreateJobPage() {
   };
 
   useEffect(() => {
-    if (createJobResult.error) {
-      setCreateJobState(null);
-    } else if (createJobResult.data) {
+    const setStatesToBlank = () => {
       setCreateJobState(JobStatus.Succesful);
+
       setPickUpPositionsState({
         ...BLANK_POSITION_STATE,
       });
       setDropOffPositionsState({
         ...BLANK_POSITION_STATE,
       });
+    };
+
+    if (createJobResult.error) {
+      // This is never executed currently, as errors are catched in useMutation onError
+      setCreateJobState(null);
+    } else if (createJobResult.data) {
+      setStatesToBlank();
 
       setFormState({ ...BLANK_FORM_STATE });
     }
