@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { ThemeProvider } from "@mui/material/styles";
-import { useLazyQuery, gql } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 
-import { geocodeAddressRequest, createJobRequest } from "../../api/main";
+import { geocodeAddressRequest, createJobRequest } from "../../../api/main";
 
-import { GeocodeStatus } from "../../enums/GeocodeStatus";
-import { JobStatus } from "../../enums/JobStatus";
-import { PositionState } from "../../interfaces/PositionState";
-import { FormState } from "../../interfaces/FormState";
-import theme from "../themes/original";
+import { GeocodeStatus } from "../../../enums/GeocodeStatus";
+import { JobStatus } from "../../../enums/JobStatus";
+import { PositionState } from "../../../interfaces/PositionState";
+import { FormState } from "../../../interfaces/FormState";
+import theme from "../../themes/original";
 
-import CreateJobTemplate from "../templates/CreateJob";
+import CreateJobTemplate from "../../templates/CreateJob";
+
+import { GEOCODE_QUERY } from "../../../graphql/operations";
+
+import { manageGeocodeState } from "./model";
 
 function CreateJobPage() {
   const BLANK_POSITION_STATE: PositionState = { status: GeocodeStatus.Blank };
@@ -35,46 +39,11 @@ function CreateJobPage() {
     dropOff: setDropOffPositionsState,
   };
 
-  const GEOCODE_QUERY = gql`
-    query GeocodeQuery($address: String!) {
-      geocode(address: $address) {
-        latitude
-        longitude
-      }
-    }
-  `;
+  // ----------------------- GEOCODE -----------------------
 
   const [geocodeAddressQueryPickUp, pickUpResult] = useLazyQuery(GEOCODE_QUERY);
   const [geocodeAddressQueryDropOff, dropOffResult] =
     useLazyQuery(GEOCODE_QUERY);
-
-  const manageGeocodeState = (
-    result: any /* TODO: add correct type */,
-    setState: Function
-  ) => {
-    // TODO: move complex business logic functions like this one to ../CreateJob/model.ts
-    // Create ../CreateJob/index.tsx for render logic
-    console.log({ result }); // TODO: remove
-    const { loading, data, error } = result;
-
-    if (!loading && data) {
-      const geocode = data.geocode;
-      if (geocode) {
-        const { latitude, longitude } = geocode;
-        setState({
-          status: GeocodeStatus.Present,
-          geocode: {
-            lat: latitude,
-            lng: longitude,
-          },
-        });
-      } else if (error) {
-        setState({
-          status: GeocodeStatus.Error,
-        });
-      }
-    }
-  };
 
   useEffect(() => {
     manageGeocodeState(pickUpResult, setPickUpPositionsState);
@@ -89,9 +58,7 @@ function CreateJobPage() {
     dropOff: geocodeAddressQueryDropOff,
   };
 
-  const geocodeAddress = async ({
-    target,
-  }: React.ChangeEvent<HTMLInputElement>) => {
+  const geocodeAddress = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     const id = target.id;
     const address = target.value;
 
@@ -117,10 +84,6 @@ function CreateJobPage() {
   });
 
   const [createJobState, setCreateJobState] = useState<JobStatus | null>(null);
-
-  const resetJobState = () => {
-    setCreateJobState(null);
-  };
 
   const setForm = (id: string, value: string) => {
     setFormState((previousState) => ({
@@ -158,7 +121,7 @@ function CreateJobPage() {
         setPosition={setForm}
         geocodeAddress={geocodeAddress}
         createJob={createJob}
-        resetJobState={resetJobState}
+        resetJobState={() => setCreateJobState(null)}
       />
     </ThemeProvider>
   );

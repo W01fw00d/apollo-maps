@@ -1,3 +1,5 @@
+// TODO: remove this file when it's not needed anymore
+
 import {
   GeocodeAPIResponse,
   CreateJobAPIResponse,
