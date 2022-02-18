@@ -8,6 +8,8 @@ const server = new ApolloServer({
   resolvers,
 });
 
+// TODO: add commands for running the server in README
+
 server.listen().then(() => {
   console.log(`
     🚀  Server is running!
