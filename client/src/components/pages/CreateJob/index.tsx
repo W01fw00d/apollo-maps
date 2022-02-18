@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import { useLazyQuery, useMutation } from "@apollo/client";
 
@@ -11,26 +11,18 @@ import { GEOCODE_QUERY, JOB_MUTATION } from "../../../graphql/operations";
 
 import CreateJobTemplate from "../../templates/CreateJob";
 
-import { getGeocodeCallbacks } from "./model";
+import { manageGeocodeState } from "./model";
 
 function CreateJobPage() {
   const BLANK_POSITION_STATE: PositionState = { status: GeocodeStatus.Blank };
   const BLANK_FORM_STATE: FormState = { pickUp: "", dropOff: "" };
-  const CACHE_AND_NETWORK_FETCH_POLICY: any = {
-    /* TODO: this is a workaround to avoid data being cached
-    and breaking the geocode feature after succesful job creation
-    (if you type again the same valid address after input has been emptied, the API won't be called,
-    and neither the callbacks will be; because the previous result is still cached)
-    The counterpart to this workaround is that we might be doing more API requests than needed.
-    * Better solution idea: instead of callbacks,
-    use the useLazyQuery.options argument to get options.data and options.error
-    and check any changes on them using a React.useEffect()
-    * More details about the issue:
-    https://stackoverflow.com/questions/58264413/how-to-execute-query-on-every-click-using-uselazyquery
-    https://github.com/apollographql/apollo-client/issues/9338
-    */
-    fetchPolicy: "cache-and-network",
-  };
+  /*   const CACHE_AND_NETWORK_FETCH_POLICY: any = {
+    // TODO: this is a workaround to avoid data being cached and breaking a feature
+    // The counterpart to this workaround is that we might be doing more API requests than needed.
+    // https://stackoverflow.com/questions/58264413/how-to-execute-query-on-every-click-using-uselazyquery
+    // https://github.com/apollographql/apollo-client/issues/9338
+    // fetchPolicy: "cache-and-network",
+  }; */
 
   const [pickUpPositionsState, setPickUpPositionsState] =
     useState<PositionState>({
@@ -47,18 +39,28 @@ function CreateJobPage() {
 
   const [createJobState, setCreateJobState] = useState<JobStatus | null>(null);
 
-  const [geocodeAddressQueryPickUp] = useLazyQuery(GEOCODE_QUERY, {
-    ...CACHE_AND_NETWORK_FETCH_POLICY,
-    ...getGeocodeCallbacks(setPickUpPositionsState),
-  });
-  const [geocodeAddressQueryDropOff] = useLazyQuery(GEOCODE_QUERY, {
-    ...CACHE_AND_NETWORK_FETCH_POLICY,
-    ...getGeocodeCallbacks(setDropOffPositionsState),
-  });
+  const [geocodeAddressQueryPickUp, pickUpGeocodeResult] = useLazyQuery(
+    GEOCODE_QUERY
+    /*     ,{
+      ...CACHE_AND_NETWORK_FETCH_POLICY,
+      ...getGeocodeCallbacks(setPickUpPositionsState),
+    } */
+  );
+  const [geocodeAddressQueryDropOff, dropOffGeocodeResult] = useLazyQuery(
+    GEOCODE_QUERY
+    /*     ,{
+      ...CACHE_AND_NETWORK_FETCH_POLICY,
+      ...getGeocodeCallbacks(setDropOffPositionsState),
+    } */
+  );
 
   const geocodeAddressQueries: { [key: string]: Function } = {
     pickUp: geocodeAddressQueryPickUp,
     dropOff: geocodeAddressQueryDropOff,
+  };
+  const geocodeAddressResults: { [key: string]: any } = {
+    pickUp: pickUpGeocodeResult,
+    dropOff: dropOffGeocodeResult,
   };
   const setPositionsState: { [key: string]: Function } = {
     pickUp: setPickUpPositionsState,
@@ -70,11 +72,16 @@ function CreateJobPage() {
     const address = target.value;
 
     if (address) {
-      geocodeAddressQueries[id]({
-        variables: {
-          address,
-        },
-      });
+      if (geocodeAddressResults[id]?.variables?.address === address) {
+        // As the current address is already cached, use the cached geocode instead of calling API
+        manageGeocodeState(geocodeAddressResults[id], setPositionsState[id]);
+      } else {
+        geocodeAddressQueries[id]({
+          variables: {
+            address,
+          },
+        });
+      }
     } else {
       setPositionsState[id]({
         ...BLANK_POSITION_STATE,
@@ -126,6 +133,13 @@ function CreateJobPage() {
       },
     });
   };
+
+  useEffect(() => {
+    manageGeocodeState(pickUpGeocodeResult, setPickUpPositionsState);
+  }, [pickUpGeocodeResult.loading, pickUpGeocodeResult.data]);
+  useEffect(() => {
+    manageGeocodeState(dropOffGeocodeResult, setDropOffPositionsState);
+  }, [dropOffGeocodeResult.data]);
 
   return (
     <ThemeProvider theme={theme}>
