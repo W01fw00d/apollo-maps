@@ -8,6 +8,17 @@ Also based on this [Apollo Tutorial](https://odyssey.apollographql.com/)
 
 ## How to run (`dev` mode)
 
+```mermaid
+graph AppFlow
+    A(fa:fa-plus-square Install Node.js) --> B(fa:fa-key Set Google Maps API Key)
+    B --> C[fa:fa-keyboard npm install]
+    C -->|Run Dev Mode| D[fa:fa-keyboard npm run start]
+    C --> E{fa:fa-check-square Run Unit Tests}
+    E --> F[fa:fa-keyboard npm run test]
+    E -->|With Coverage| G[fa:fa-keyboard npm run test-cover]
+    C -->|Build for Prod Mode| H[fa:fa-keyboard npm run build]
+```
+
 - Make sure you have Node.js installed.
 
 - You need a Google Maps JS API Key.
