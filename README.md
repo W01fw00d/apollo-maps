@@ -6,17 +6,19 @@ Based on this [frontend challenge](https://github.com/W01fw00d/frontend-challeng
 
 Also based on this [Apollo Tutorial](https://odyssey.apollographql.com/)
 
-## How to run (`dev` mode)
+## How to run
 
 ```mermaid
-graph AppFlow
-    A(fa:fa-plus-square Install Node.js) --> B(fa:fa-key Set Google Maps API Key)
-    B --> C[fa:fa-keyboard npm install]
-    C -->|Run Dev Mode| D[fa:fa-keyboard npm run start]
-    C --> E{fa:fa-check-square Run Unit Tests}
-    E --> F[fa:fa-keyboard npm run test]
-    E -->|With Coverage| G[fa:fa-keyboard npm run test-cover]
-    C -->|Build for Prod Mode| H[fa:fa-keyboard npm run build]
+  graph LR;
+      Ga(Install Node.js)-->Gb(Set Google Maps API Key);
+      Gb-->|Run in './client'|Cc['npm install'];
+      Cc-->|Run Dev Mode|Cca['npm start'];
+      Cc-->Ccb{Run Unit Tests};
+      Ccb-->Ccba['npm test'];
+      Ccb-->|With Coverage|Ccbb['npm run test-cover'];
+      Cc-->|Build for Prod Mode|Ccc['npm run build'];
+      Gb-->|Run in './server'|Sa['npm install'];
+      Sa-->|Run Dev Mode|Saa['npm start'];
 ```
 
 - Make sure you have Node.js installed.
@@ -40,13 +42,13 @@ npm install
 Run the App locally in development mode (with hot-reload) in http://localhost:3000/ :
 
 ```
-npm run start
+npm start
 ```
 
 Run the Jest tests:
 
 ```
-npm run test
+npm test
 ```
 
 Generate a test coverage report in /coverage:
@@ -61,6 +63,20 @@ Build the App in production mode (for deploying in a server):
 npm run build
 ```
 
+- Commands (`server/`)
+
+Install the dependencies:
+
+```
+npm install
+```
+
+Run the Dev Mode API Server:
+
+```
+npm start
+```
+
 ## Troubleshooting
 
 If you get a warning when using Chrome DevTools similar to:
@@ -73,9 +89,20 @@ Try to disable the JavaScript source maps in DevTools preferences
 
 ## Tech Stack
 
+General
+
 - TypeScript
-- React
 - Webpack
 - Babel
+
+Client
+
+- React
 - Jest
 - Material-UI (MUI)
+- Apollo Client
+
+Server
+
+- Graphql
+- Apollo Server
